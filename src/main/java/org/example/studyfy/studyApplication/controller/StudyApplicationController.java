@@ -1,6 +1,9 @@
 package org.example.studyfy.studyApplication.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.studyfy.member.db.Member;
+import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.studyApplication.domain.ApplicationStatus;
 import org.example.studyfy.studyApplication.domain.StudyApplication;
 import org.example.studyfy.studyApplication.dto.ApplicationResponse;
@@ -11,23 +14,26 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/applications")
 public class StudyApplicationController {
 
     private final StudyApplicationService studyApplicationService;
+    private final MemberRepository memberRepository;
 
     // 신청하기
     @PostMapping("/study/{studyId}/apply")
     public ResponseEntity<ApplicationResponse> applyForStudy(@PathVariable Long studyId) {
         try {
             // 임시 사용자 ID (나중에 인증 붙이면 수정 예정)
-            String username = "tempUser";
-            StudyApplication application = studyApplicationService.applyToStudy(studyId, username);
+            String userEmail = "test@example.com";
+            StudyApplication application = studyApplicationService.applyToStudy(studyId, userEmail);
             return ResponseEntity.status(201).body(ApplicationResponse.fromEntity(application));
         } catch (IllegalStateException | IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            log.error("에러: >>>>>{}", e.getMessage(), e);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -35,8 +41,8 @@ public class StudyApplicationController {
     @GetMapping("/study/{studyId}/pending")
     public ResponseEntity<List<ApplicationResponse>> getPendingApplications(@PathVariable Long studyId) {
         try {
-            String username = "tempUser";  // 임시
-            List<StudyApplication> applications = studyApplicationService.getPendingApplicationsForStudyByCreator(studyId, username);
+            Member member = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
+            List<StudyApplication> applications = studyApplicationService.getPendingApplicationsForStudyByCreator(studyId, member);
             List<ApplicationResponse> dtos = applications.stream()
                     .map(ApplicationResponse::fromEntity)
                     .collect(Collectors.toList());
@@ -52,8 +58,8 @@ public class StudyApplicationController {
     @PostMapping("/{applicationId}/approve")
     public ResponseEntity<ApplicationResponse> approveApplication(@PathVariable Long applicationId) {
         try {
-            String username = "tempUser";  // 임시
-            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.APPROVED, username);
+            Member member = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
+            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.APPROVED, member);
             return ResponseEntity.ok(ApplicationResponse.fromEntity(application));
         } catch (SecurityException e) {
             return ResponseEntity.status(403).body(null);
@@ -66,8 +72,8 @@ public class StudyApplicationController {
     @PostMapping("/{applicationId}/reject")
     public ResponseEntity<ApplicationResponse> rejectApplication(@PathVariable Long applicationId) {
         try {
-            String username = "tempUser";  // 임시
-            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.REJECTED, username);
+            Member member = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
+            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.REJECTED, member);
             return ResponseEntity.ok(ApplicationResponse.fromEntity(application));
         } catch (SecurityException e) {
             return ResponseEntity.status(403).body(null);
