@@ -9,6 +9,7 @@ import org.example.studyfy.studyApplication.domain.StudyApplication;
 import org.example.studyfy.studyApplication.dto.ApplicationResponse;
 import org.example.studyfy.studyApplication.service.StudyApplicationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +26,10 @@ public class StudyApplicationController {
 
     // 신청하기
     @PostMapping("/study/{studyId}/apply")
-    public ResponseEntity<ApplicationResponse> applyForStudy(@PathVariable Long studyId) {
+    public ResponseEntity<ApplicationResponse> applyForStudy(@PathVariable Long studyId,
+                                                             @AuthenticationPrincipal MemberEntity member) {
         try {
-            // 임시 사용자 ID (나중에 인증 붙이면 수정 예정)
-            String userEmail = "test@example.com";
-            StudyApplication application = studyApplicationService.applyToStudy(studyId, userEmail);
+            StudyApplication application = studyApplicationService.applyToStudy(studyId, member.getEmail());
             return ResponseEntity.status(201).body(ApplicationResponse.fromEntity(application));
         } catch (IllegalStateException | IllegalArgumentException e) {
             log.error("에러: >>>>>{}", e.getMessage(), e);
