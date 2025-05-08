@@ -1,4 +1,4 @@
-package org.example.studyfy.dto;
+package org.example.studyfy.studyApplication.dto;
 
 public record StudyApplicationRequest(String message) {
 

@@ -1,11 +1,13 @@
-package org.example.studyfy.service;
+package org.example.studyfy.studyApplication.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.studyfy.domain.ApplicationStatus;
-import org.example.studyfy.domain.Study;
-import org.example.studyfy.domain.StudyApplication;
-import org.example.studyfy.repository.StudyApplicationRepository;
-import org.example.studyfy.repository.StudyRepository;
+import org.example.studyfy.member.db.Member;
+import org.example.studyfy.member.db.MemberRepository;
+import org.example.studyfy.study.entity.StudyEntity;
+import org.example.studyfy.study.repository.StudyRepository;
+import org.example.studyfy.studyApplication.domain.ApplicationStatus;
+import org.example.studyfy.studyApplication.domain.StudyApplication;
+import org.example.studyfy.studyApplication.repository.StudyApplicationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,23 +18,32 @@ import java.util.List;
 public class StudyApplicationService {
 
     private final StudyApplicationRepository studyApplicationRepository;
+    private final MemberRepository memberRepository;
     private final StudyRepository studyRepository;
 
     @Transactional
     public StudyApplication applyToStudy(Long studyId, String dummyUsername) {
-        Study study = studyRepository.findById(studyId)
+        StudyEntity study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new IllegalArgumentException("스터디를 찾을 수 없습니다: ID " + studyId));
 
-        // 아직 Member 관련 구현이 안됐으므로, 임시로 null 또는 더미로 처리
-        // 실제 구현 시 Member 객체를 DB에서 조회하여 사용해야 함
-        // 예: Member applicant = memberRepository.findByUsername(dummyUsername).orElseThrow(...);
+        // 더미 멤버 생성
+        Member dummyMember = Member.builder()
+                .userName("테스트유저")
+                .password("temp")
+                .email("temp@example.com")
+                .gender("M")
+                .build();
 
-        // 여기서는 일단 멤버 없이 생성하도록 처리
-        throw new UnsupportedOperationException("Member 엔티티 구현 이후 applyToStudy 로직을 완성해야 합니다.");
+// 먼저 memberRepository에 저장
+        Member savedDummyMember = memberRepository.save(dummyMember);
+
+// 그 다음 StudyApplication 생성 및 저장
+        StudyApplication application = new StudyApplication(study, savedDummyMember);
+        return studyApplicationRepository.save(application);
     }
 
     public List<StudyApplication> getPendingApplicationsForStudyByCreator(Long studyId, String dummyUsername) {
-        Study study = studyRepository.findById(studyId)
+        StudyEntity study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new IllegalArgumentException("스터디를 찾을 수 없습니다: ID " + studyId));
 
         // 개설자 검증 로직은 Member 구현 후 추가

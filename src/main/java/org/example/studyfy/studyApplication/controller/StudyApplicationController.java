@@ -1,10 +1,10 @@
-package org.example.studyfy.controller;
+package org.example.studyfy.studyApplication.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.studyfy.domain.ApplicationStatus;
-import org.example.studyfy.domain.StudyApplication;
-import org.example.studyfy.dto.ApplicationResponse;
-import org.example.studyfy.service.StudyApplicationService;
+import org.example.studyfy.studyApplication.domain.ApplicationStatus;
+import org.example.studyfy.studyApplication.domain.StudyApplication;
+import org.example.studyfy.studyApplication.dto.ApplicationResponse;
+import org.example.studyfy.studyApplication.service.StudyApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

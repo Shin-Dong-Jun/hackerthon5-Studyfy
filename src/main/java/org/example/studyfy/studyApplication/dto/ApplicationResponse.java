@@ -1,6 +1,6 @@
-package org.example.studyfy.dto;
+package org.example.studyfy.studyApplication.dto;
 
-import org.example.studyfy.domain.StudyApplication;
+import org.example.studyfy.studyApplication.domain.StudyApplication;
 
 public record ApplicationResponse(
         Long id,

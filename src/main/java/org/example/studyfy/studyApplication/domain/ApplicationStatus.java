@@ -1,4 +1,4 @@
-package org.example.studyfy.domain;
+package org.example.studyfy.studyApplication.domain;
 
 public enum ApplicationStatus {
 

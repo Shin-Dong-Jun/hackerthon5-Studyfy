@@ -1,10 +1,12 @@
-package org.example.studyfy.domain;
+package org.example.studyfy.studyApplication.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.studyfy.BaseEntity;
+import org.example.studyfy.member.db.Member;
+import org.example.studyfy.study.entity.StudyEntity;
 
 
 @Entity
@@ -16,7 +18,7 @@ public class StudyApplication extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id", nullable = false)
-    private Study study;
+    private StudyEntity study;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -25,7 +27,7 @@ public class StudyApplication extends BaseEntity {
     @Column
     private ApplicationStatus applicationStatus;
 
-    public StudyApplication(Study study, Member applicatedMember){
+    public StudyApplication(StudyEntity study, Member applicatedMember){
         this.study = study;
         this.applicatedMember = applicatedMember;
         this.applicationStatus = ApplicationStatus.PENDING;
