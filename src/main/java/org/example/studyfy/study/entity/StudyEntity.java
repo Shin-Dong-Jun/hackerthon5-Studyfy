@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.studyfy.BaseEntity;
+import org.example.studyfy.study.dto.StudyRequestDto;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +37,7 @@ public class StudyEntity extends BaseEntity {
     private String description; // 스터디 설명
 
     @Column(nullable = false)
-    private int max_participants; // 최대 참가자 수
+    private Integer max_participants; // 최대 참가자 수
 
     @Column(nullable = false)
     private String method; // 스터디 진행 방식
@@ -50,4 +51,19 @@ public class StudyEntity extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime deadline; // 모집 마감일
 
+
+    // 매장 정보 수정
+    public void updateStudy(Long categoryId, String title, String goal, String description,
+                             int max_participants, String method,
+                             LocalDateTime duration_start, LocalDateTime duration_end, LocalDateTime deadline) {
+        this.categoryId = categoryId;
+        this.title = title;
+        this.goal = goal;
+        this.description = description;
+        this.max_participants = max_participants;
+        this.method = method;
+        this.duration_start = duration_start;
+        this.duration_end = duration_end;
+        this.deadline = deadline;
+    }
 }

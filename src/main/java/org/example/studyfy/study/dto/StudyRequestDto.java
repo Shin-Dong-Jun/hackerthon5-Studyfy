@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyRequestDto {
-//    private Long creatorId;
+    private Long creatorId; // member 추후 삭제
     private Long categoryId;
     private String title;
     private String goal;
@@ -25,18 +25,18 @@ public class StudyRequestDto {
     private LocalDateTime deadline; // 모집 마감일
 
 
-    public StudyEntity toEntity(Long memberId, StudyRequestDto dto) {
+    public StudyEntity toEntity(Long memberId) {
         return StudyEntity.builder()
                 .creatorId(memberId)
-                .categoryId(dto.getCategoryId())
-                .title(dto.getTitle())
-                .goal(dto.getGoal())
-                .description(dto.getDescription())
-                .max_participants(dto.getMax_participants())
-                .method(dto.getMethod())
-                .duration_start(dto.getDuration_start())
-                .duration_end(dto.getDuration_end())
-                .deadline(dto.getDeadline())
+                .categoryId(categoryId)
+                .title(title)
+                .goal(goal)
+                .description(description)
+                .max_participants(max_participants)
+                .method(method)
+                .duration_start(duration_start)
+                .duration_end(duration_end)
+                .deadline(deadline)
                 .build();
     }
 }
