@@ -6,8 +6,6 @@ import lombok.*;
 import org.example.studyfy.BaseEntity;
 import org.hibernate.annotations.Comment;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @ToString
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity(name="member")
-public class MemberEntity extends BaseEntity {
+public class Member extends BaseEntity {
 
     @Comment("user 이름")
     private String userName;
