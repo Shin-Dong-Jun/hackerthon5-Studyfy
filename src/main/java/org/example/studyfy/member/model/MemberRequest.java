@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-import org.example.studyfy.member.db.Member;
+import org.example.studyfy.member.db.MemberEntity;
 
 @Getter
 @Setter
@@ -33,8 +33,8 @@ public class MemberRequest  {
     private String gender = "M";
 
     // DTO → Entity 변환 메서드
-    public Member toEntity() {
-        return Member.builder()
+    public MemberEntity toEntity() {
+        return MemberEntity.builder()
                 .userName(this.userName)
                 .password(this.password)
                 .email(this.email)

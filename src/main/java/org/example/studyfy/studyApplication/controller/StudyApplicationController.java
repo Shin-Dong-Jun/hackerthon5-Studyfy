@@ -2,13 +2,14 @@ package org.example.studyfy.studyApplication.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.studyfy.member.db.Member;
+import org.example.studyfy.member.db.MemberEntity;
 import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.studyApplication.domain.ApplicationStatus;
 import org.example.studyfy.studyApplication.domain.StudyApplication;
 import org.example.studyfy.studyApplication.dto.ApplicationResponse;
 import org.example.studyfy.studyApplication.service.StudyApplicationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/applications")
+@RequestMapping("/api/v1/applications")
 public class StudyApplicationController {
 
     private final StudyApplicationService studyApplicationService;
@@ -25,11 +26,10 @@ public class StudyApplicationController {
 
     // 신청하기
     @PostMapping("/study/{studyId}/apply")
-    public ResponseEntity<ApplicationResponse> applyForStudy(@PathVariable Long studyId) {
+    public ResponseEntity<ApplicationResponse> applyForStudy(@PathVariable Long studyId,
+                                                             @AuthenticationPrincipal MemberEntity member) {
         try {
-            // 임시 사용자 ID (나중에 인증 붙이면 수정 예정)
-            String userEmail = "test@example.com";
-            StudyApplication application = studyApplicationService.applyToStudy(studyId, userEmail);
+            StudyApplication application = studyApplicationService.applyToStudy(studyId, member.getEmail());
             return ResponseEntity.status(201).body(ApplicationResponse.fromEntity(application));
         } catch (IllegalStateException | IllegalArgumentException e) {
             log.error("에러: >>>>>{}", e.getMessage(), e);
@@ -41,8 +41,8 @@ public class StudyApplicationController {
     @GetMapping("/study/{studyId}/pending")
     public ResponseEntity<List<ApplicationResponse>> getPendingApplications(@PathVariable Long studyId) {
         try {
-            Member member = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
-            List<StudyApplication> applications = studyApplicationService.getPendingApplicationsForStudyByCreator(studyId, member);
+            MemberEntity memberEntity = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
+            List<StudyApplication> applications = studyApplicationService.getPendingApplicationsForStudyByCreator(studyId, memberEntity);
             List<ApplicationResponse> dtos = applications.stream()
                     .map(ApplicationResponse::fromEntity)
                     .collect(Collectors.toList());
@@ -58,8 +58,8 @@ public class StudyApplicationController {
     @PostMapping("/{applicationId}/approve")
     public ResponseEntity<ApplicationResponse> approveApplication(@PathVariable Long applicationId) {
         try {
-            Member member = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
-            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.APPROVED, member);
+            MemberEntity memberEntity = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
+            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.APPROVED, memberEntity);
             return ResponseEntity.ok(ApplicationResponse.fromEntity(application));
         } catch (SecurityException e) {
             return ResponseEntity.status(403).body(null);
@@ -72,8 +72,8 @@ public class StudyApplicationController {
     @PostMapping("/{applicationId}/reject")
     public ResponseEntity<ApplicationResponse> rejectApplication(@PathVariable Long applicationId) {
         try {
-            Member member = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
-            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.REJECTED, member);
+            MemberEntity memberEntity = memberRepository.findByEmail("test@example.com").orElseThrow(() -> new IllegalStateException("Member not found"));
+            StudyApplication application = studyApplicationService.processApplication(applicationId, ApplicationStatus.REJECTED, memberEntity);
             return ResponseEntity.ok(ApplicationResponse.fromEntity(application));
         } catch (SecurityException e) {
             return ResponseEntity.status(403).body(null);
