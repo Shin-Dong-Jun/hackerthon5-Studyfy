@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tutti_dev?serverTimezone=Asia/Seoul&useSSL=false
+    url: jdbc:mysql://localhost:3306/studyfy_dev
     username: root
     password: Tlsehdwns147!
     driver-class-name: com.mysql.cj.jdbc.Driver
