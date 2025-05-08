@@ -1,6 +1,7 @@
 package org.example.studyfy.study.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.studyfy.member.db.Member;
 import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.study.dto.StudyRequestDto;
 import org.example.studyfy.study.dto.StudyResponseDto;
