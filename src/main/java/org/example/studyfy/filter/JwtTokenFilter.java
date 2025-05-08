@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.studyfy.config.JwtTokenProvider;
-import org.example.studyfy.member.db.MemberEntity;
+import org.example.studyfy.member.db.Member;
 import org.example.studyfy.member.db.MemberRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,7 +42,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             if(jwtTokenProvider.validateToken(token)) {
                 //토큰에서 이메일 정보 추출
                 String email = jwtTokenProvider.getEmail(token);
-                MemberEntity user = memberRepository.findFirstByEmail(email).orElse(null); //값이 없을 경우, null 반환 /있으면 해당 값 반환
+                Member user = memberRepository.findFirstByEmail(email).orElse(null); //값이 없을 경우, null 반환 /있으면 해당 값 반환
 
 
                 //사용자가 존재할 경우
