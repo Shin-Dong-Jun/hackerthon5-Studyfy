@@ -1,6 +1,8 @@
 package org.example.studyfy.study.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.studyfy.member.db.Member;
+import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.study.dto.StudyRequestDto;
 import org.example.studyfy.study.dto.StudyResponseDto;
 import org.example.studyfy.study.entity.StudyEntity;
@@ -16,17 +18,17 @@ import java.util.stream.Collectors;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+    private final MemberRepository memberRepository;
 
     // 스터디 생성
     @Transactional
     public StudyResponseDto createStudy(Long memberId, StudyRequestDto requestDto) {
         // member
-        /*User creator = userRepository.findById(creatorId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));*/
-        // category
+//        MemberEntity creator = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
         // study
-        StudyEntity study = requestDto.toEntity(memberId, requestDto);
+        StudyEntity study = requestDto.toEntity(memberId);
         StudyEntity savedStudy = studyRepository.save(study);
 
         return StudyResponseDto.fromEntity(savedStudy);
@@ -51,23 +53,21 @@ public class StudyService {
     @Transactional
     public StudyResponseDto updateStudy(Long id, StudyRequestDto request) {
         StudyEntity study = studyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Study not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("해당 게시물 id를 찾을 수 없습니다.: " + id));
 
-        // Update fields
-        study = StudyEntity.builder()
-//                .creatorId(request.get)
-                .categoryId(request.getCategoryId())
-                .title(request.getTitle())
-                .goal(request.getGoal())
-                .description(request.getDescription())
-                .max_participants(request.getMax_participants())
-                .method(request.getMethod())
-                .duration_start(request.getDuration_start())
-                .duration_end(request.getDuration_end())
-                .deadline(request.getDeadline())
-                .build();
+//        validateCreatorId(study, memberId); // 작성자 id 검증
 
-        // BaseEntity의 ID를 직접 설정할 방법이 없어 이 부분은 실제 구현 시 수정 필요
+        study.updateStudy(
+                request.getCategoryId(),
+                request.getTitle(),
+                request.getGoal(),
+                request.getDescription(),
+                request.getMax_participants(),
+                request.getMethod(),
+                request.getDuration_start(),
+                request.getDuration_end(),
+                request.getDeadline()
+        );
 
         StudyEntity updatedEntity = studyRepository.save(study);
         return StudyResponseDto.fromEntity(updatedEntity);
@@ -76,6 +76,17 @@ public class StudyService {
     // 스터디 삭제
     @Transactional
     public void deleteStudy(Long id) {
+        StudyEntity study = studyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 게시물 id를 찾을 수 없습니다.: " + id));
+
+//        validateCreatorId(study, memberId); // 작성자 id 검증
         studyRepository.deleteById(id);
+    }
+
+    // 스터디 개설자 멤버 id 검증
+    private void validateCreatorId(StudyEntity study, Long memberId) {
+        if (!study.getCreatorId().equals(memberId)) {
+            throw new RuntimeException("스터디 수정 권한이 없습니다.");
+        }
     }
 }
