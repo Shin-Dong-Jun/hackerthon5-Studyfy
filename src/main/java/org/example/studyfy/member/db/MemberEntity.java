@@ -13,7 +13,7 @@ import org.hibernate.annotations.Comment;
 @AllArgsConstructor
 @Builder
 @Entity(name="member")
-public class Member extends BaseEntity {
+public class MemberEntity extends BaseEntity {
 
     @Comment("user 이름")
     private String userName;

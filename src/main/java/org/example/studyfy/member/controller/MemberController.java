@@ -2,7 +2,7 @@ package org.example.studyfy.member.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.studyfy.member.db.Member;
+import org.example.studyfy.member.db.MemberEntity;
 import org.example.studyfy.member.model.MemberRequest;
 import org.example.studyfy.member.service.MemberService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +19,11 @@ public class MemberController {
 
     //회원가입
     @PostMapping("/sign")
-    public Member create(
+    public MemberEntity create(
             @Valid
             @RequestBody MemberRequest request
     ){
-        Member memberEntity = request.toEntity();
+        MemberEntity memberEntity = request.toEntity();
         return memberService.create(memberEntity);
     }
 

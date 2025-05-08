@@ -1,7 +1,7 @@
 package org.example.studyfy.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.studyfy.member.db.Member;
+import org.example.studyfy.member.db.MemberEntity;
 import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.member.model.MemberRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,8 +14,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder; //패스워드 암호화용
 
-    public Member create(
-            Member memberEntity
+    public MemberEntity create(
+            MemberEntity memberEntity
     ){
         var optionalMember = memberRepository.findFirstByEmail(memberEntity.getEmail());
         //패스워드 암호화
@@ -26,7 +26,7 @@ public class MemberService {
             //있으면 예외처리
             throw new IllegalStateException("이미 가입된 이메일입니다.");
         }else{
-            var entity = Member.builder()
+            var entity = MemberEntity.builder()
                     .userName(memberEntity.getUserName())
                     .password(encodedPassword)
                     .email(memberEntity.getEmail())
