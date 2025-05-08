@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/api/studies")
+@RequestMapping("/api/v1/studies")
 @RestController
 @RequiredArgsConstructor
 public class StudySearchController {

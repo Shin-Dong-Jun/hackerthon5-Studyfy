@@ -14,7 +14,7 @@ public record ApplicationResponse(
         return new ApplicationResponse(
                 app.getId(),
                 app.getStudy().getId(),
-                app.getApplicatedMember().getId(),
+                app.getApplicatedMemberEntity().getId(),
                 app.getApplicationStatus().name()
         );
     }
