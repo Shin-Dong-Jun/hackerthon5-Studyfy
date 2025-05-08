@@ -20,3 +20,6 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
+
+#jwt:
+#  secret-key: jt0xTkKa4bVg8h2LmAun0o73iHwirNeEFMOeXvVmo1Y=

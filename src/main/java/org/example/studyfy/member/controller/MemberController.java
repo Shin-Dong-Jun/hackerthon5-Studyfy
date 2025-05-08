@@ -27,5 +27,14 @@ public class MemberController {
         return memberService.create(memberEntity);
     }
 
+    @PostMapping("/login_test")
+    public String loginTest(
+            @Valid
+            @RequestBody MemberRequest request
+    ){
+        return memberService.findMember(request);
+    }
+
+
 
 }
