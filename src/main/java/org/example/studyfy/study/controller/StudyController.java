@@ -55,7 +55,7 @@ public class StudyController {
 
 
     // 스터디 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMagitpping("/{id}")
     public ResponseEntity<Void> deleteStudy(@PathVariable Long id) {
         // 유저 아이디 getId 수정 필요
         studyService.deleteStudy(id);

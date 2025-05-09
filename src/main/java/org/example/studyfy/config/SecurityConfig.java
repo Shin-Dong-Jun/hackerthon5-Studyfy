@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 //security 설정
 @Configuration  //spring 설정 클래스
 @EnableWebSecurity //Spring Security 활성화 및 보안 설정 적용
@@ -25,6 +27,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
+                .cors(cors -> cors
+                        .configurationSource(request -> {
+                            var config = new org.springframework.web.cors.CorsConfiguration();
+                            config.setAllowedOrigins(List.of("*")); // 모든 도메인 허용 (개발용)
+                            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            config.setAllowedHeaders(List.of("*"));
+                            config.setAllowCredentials(false); // allowCredentials는 *와 함께 사용 불가
+                            return config;
+                        })
+                )
                 .csrf(csrf -> csrf.disable()) //csrf 보호 기능 off ,JWT 기반 인증에서는 필요없음
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//JWT는 서버가 상태 저장하지 않으니 필수 설정
                 .formLogin(form -> form.disable()) //Spring Security의 기본 로그인 폼 기능을 비활성화

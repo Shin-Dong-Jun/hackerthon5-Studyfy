@@ -26,9 +26,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
-
     //Http 요청마다 실행
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -43,22 +41,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 //토큰에서 이메일 정보 추출
                 String email = jwtTokenProvider.getEmail(token);
                 Member user = memberRepository.findFirstByEmail(email).orElse(null); //값이 없을 경우, null 반환 /있으면 해당 값 반환
-
-
+                
                 //사용자가 존재할 경우
                 if (user != null) {
                     //인증 객체 생성
-                    //user는 principal로 설정되고, 비밀번호나 권한은 지금 생략되어 있음 -> 권한 추후 필요
+                    //user는 principal로 설정되고, 비밀번호나 권한은 지금은 생략되어 있음 => 추후 권한 부여 예정
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                             user, null, List.of()
                     );
-                    //위 인증 정보를 SecurityContex에 등록 -> 이후 처리 시 '로그인됨 사용자'로 인식 됨
+                    //위 인증 정보를 SecurityContex에 등록 => 이후 처리 시 '로그인됨 사용자'로 인식 됨
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
         }
-        log.info("Request URI: {}", request.getRequestURI());
-
         //인증 처리 후 다음 필터나 컨트롤러로 요청을 전달
         filterChain.doFilter(request, response);
     }
