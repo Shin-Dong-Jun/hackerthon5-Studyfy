@@ -24,8 +24,8 @@ public class StudyEntity extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Long creatorId; // 유저 ID 작성자
 
-    @JoinColumn(name = "category_id", nullable = false)
-    private Long categoryId; // 카테고리 ID
+    @Column(nullable = false)
+    private String  category; // 카테고리
 
     @Column(nullable = false)
     private String title; // 스터디명
@@ -53,10 +53,10 @@ public class StudyEntity extends BaseEntity {
 
 
     // 매장 정보 수정
-    public void updateStudy(Long categoryId, String title, String goal, String description,
+    public void updateStudy(String category, String title, String goal, String description,
                              int max_participants, String method,
                              LocalDateTime duration_start, LocalDateTime duration_end, LocalDateTime deadline) {
-        this.categoryId = categoryId;
+        this.category = category;
         this.title = title;
         this.goal = goal;
         this.description = description;

@@ -20,7 +20,7 @@ public class StudyRequestDto {
     private Long creatorId;
 
     @NotNull(message = "카테고리는 필수입니다.")
-    private Long categoryId;
+    private String category;
 
     @NotBlank(message = "제목은 필수입니다.")
     private String title;
@@ -50,7 +50,7 @@ public class StudyRequestDto {
     public StudyEntity toEntity(Long memberId) {
         return StudyEntity.builder()
                 .creatorId(memberId)
-                .categoryId(categoryId)
+                .category(category)
                 .title(title)
                 .goal(goal)
                 .description(description)

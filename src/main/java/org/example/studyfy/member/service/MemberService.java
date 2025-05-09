@@ -1,11 +1,14 @@
 package org.example.studyfy.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.studyfy.exception.InvalidLoginException;
 import org.example.studyfy.member.db.Member;
 import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.member.model.MemberRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class MemberService {
         //이미 존재하는 회원인지 확인 여부
         if (optionalMember.isPresent()) {
             //있으면 예외처리
-            throw new IllegalStateException("이미 가입된 이메일입니다.");
+            throw  new InvalidLoginException("이미 존재하는 이메일입니다.");  
         }else{
             var entity = Member.builder()
                     .userName(memberEntity.getUserName())

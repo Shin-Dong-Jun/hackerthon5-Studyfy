@@ -16,7 +16,7 @@ public class StudyResponseDto {
 
     private Long id;
     private Long creatorId;
-    private Long categoryId;
+    private String category;
     private String title;
     private String goal;
     private String description;
@@ -33,7 +33,7 @@ public class StudyResponseDto {
         return StudyResponseDto.builder()
                 .id(entity.getId())
                 .creatorId(entity.getCreatorId())
-                .categoryId(entity.getCategoryId())
+                .category(entity.getCategory())
                 .title(entity.getTitle())
                 .goal(entity.getGoal())
                 .description(entity.getDescription())

@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable()) //Spring Security의 기본 로그인 폼 기능을 비활성화
                 .httpBasic(basic -> basic.disable()) //Spring Security의 HTTP Basic 인증 방식을 비활성
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/v1/member/sign", "api/v1/login", "/").permitAll()
+                        .requestMatchers("/api/v1/member/sign", "/api/v1/login", "/").permitAll()
                         .anyRequest().authenticated()
                 )//특정경로의 요청 설정 (회원가입, 로그인은 인증 없이 접근 허용, 그 외 모든 요청 인증 필요)
                 .exceptionHandling(e -> e

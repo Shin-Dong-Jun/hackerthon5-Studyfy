@@ -30,6 +30,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String path = request.getRequestURI();
+        if (path.equals("/api/v1/member/sign") || path.equals("/api/v1/login") || path.equals("/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         //클라이언트 요청의 Authorization 헤더에서 JWT 토큰 추출
         String header = request.getHeader("Authorization");
         //Bearer {token} 형식인지 확인

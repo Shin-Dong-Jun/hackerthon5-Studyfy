@@ -63,7 +63,7 @@ public class StudyService {
         validateCreatorId(study, currentUser.getId()); // 작성자 id 검증
 
         study.updateStudy(
-                request.getCategoryId(),
+                request.getCategory(),
                 request.getTitle(),
                 request.getGoal(),
                 request.getDescription(),

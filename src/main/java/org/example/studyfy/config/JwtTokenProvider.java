@@ -21,7 +21,6 @@ public class JwtTokenProvider {
 
     //토큰 생성
     public String createToken(String email){
-        log.info("Request URI: {} , 토큰 생성 시작",email);
         //Jwts(jjwt의 핵심 유틸리티 클래스)
         return Jwts.builder()
                 .setSubject(email) //JWT 토큰의 subject
