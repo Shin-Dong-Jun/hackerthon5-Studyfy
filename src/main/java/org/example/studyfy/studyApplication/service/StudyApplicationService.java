@@ -1,7 +1,7 @@
 package org.example.studyfy.studyApplication.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.studyfy.member.db.MemberEntity;
+import org.example.studyfy.member.db.Member;
 import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.study.entity.StudyEntity;
 import org.example.studyfy.study.repository.StudyRepository;
@@ -26,14 +26,14 @@ public class StudyApplicationService {
         StudyEntity study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new IllegalArgumentException("스터디를 찾을 수 없습니다: ID " + studyId));
 
-        MemberEntity memberEntity = memberRepository.findByEmail(email)
+        Member memberEntity = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
 
         StudyApplication application = new StudyApplication(study, memberEntity);
         return studyApplicationRepository.save(application);
     }
 
-    public List<StudyApplication> getPendingApplicationsForStudyByCreator(Long studyId, MemberEntity memberEntity) {
+    public List<StudyApplication> getPendingApplicationsForStudyByCreator(Long studyId, Member memberEntity) {
         StudyEntity study = studyRepository.findById(studyId)
                 .orElseThrow(() -> new IllegalArgumentException("스터디를 찾을 수 없습니다: ID " + studyId));
 
@@ -45,7 +45,7 @@ public class StudyApplicationService {
     }
 
     @Transactional
-    public StudyApplication processApplication(Long applicationId, ApplicationStatus newStatus, MemberEntity memberEntity) {
+    public StudyApplication processApplication(Long applicationId, ApplicationStatus newStatus, Member memberEntity) {
         StudyApplication application = studyApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("신청 정보를 찾을 수 없습니다: ID " + applicationId));
 

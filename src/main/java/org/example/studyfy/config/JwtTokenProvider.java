@@ -14,16 +14,10 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    //2바이트 크기의 랜덤 데이터를 생성하고 이를 Base64로 인코딩
     //@Value("${jwt.secret-key}")
-    private final String secretKey = "jt0xTkKa4bVg8h2LmAun0o73iHwirNeEFMOeXvVmo1Y="; //변수로 빼야 함
+    private final String secretKey = "jt0xTkKa4bVg8h2LmAun0o73iHwirNeEFMOeXvVmo1Y="; //추후 환경변수로 변경할 예정
     //토큰 유효 시간 설정 - 3시간
     private final long expiration = 1000L*60*60*3;
-
-//    public JwtTokenProvider(){
-//        Dotenv dotenv = Dotenv.load();
-//        this.secretKey = dotenv.get("JWT_SECRET_KEy");
-//    }
 
     //토큰 생성
     public String createToken(String email){

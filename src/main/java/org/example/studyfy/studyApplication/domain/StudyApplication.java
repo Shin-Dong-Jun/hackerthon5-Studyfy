@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.studyfy.BaseEntity;
-import org.example.studyfy.member.db.MemberEntity;
+import org.example.studyfy.member.db.Member;
 import org.example.studyfy.study.entity.StudyEntity;
 
 
@@ -22,12 +22,12 @@ public class StudyApplication extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private MemberEntity applicatedMemberEntity;
+    private Member applicatedMemberEntity;
 
     @Column
     private ApplicationStatus applicationStatus;
 
-    public StudyApplication(StudyEntity study, MemberEntity applicatedMemberEntity){
+    public StudyApplication(StudyEntity study, Member applicatedMemberEntity){
         this.study = study;
         this.applicatedMemberEntity = applicatedMemberEntity;
         this.applicationStatus = ApplicationStatus.PENDING;
