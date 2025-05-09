@@ -1,9 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://host.docker.internal:3306/studyfy
+    url: jdbc:mysql://localhost:3306/studyfy
     username: root
     password: studyfy
     driver-class-name: com.mysql.cj.jdbc.Driver
+
 
   jpa:
     hibernate:
