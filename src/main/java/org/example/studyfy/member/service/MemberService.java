@@ -37,19 +37,4 @@ public class MemberService {
             return memberRepository.save(entity);
         }
     }
-
-    
-    //테스트
-    public String findMember(
-            MemberRequest request
-    ){
-        //이메일로 계정이 있는지 확인
-        var optionalMember = memberRepository.findFirstByEmail(request.getEmail());
-
-        if (optionalMember.isPresent()) {
-            return "optionalMember 존재";
-        }
-        return "optionalMember 없음";
-    }
-
 }
