@@ -37,7 +37,11 @@ out/
 .vscode/
 
 ###환경변수###
+<<<<<<< HEAD
 .env
 
 ### macOS ###
 .DS_Store
+=======
+.env.DS_Store
+>>>>>>> 7bf54d0473f2ce47f8d3f1c6008414b158bd13b8

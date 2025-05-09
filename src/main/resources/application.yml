@@ -1,7 +1,6 @@
 spring:
   profiles:
     active: dev
-  config:
-    import: optional:file.env[.properties]
+
 #jwt:
 #  secret-key: ${JWT_SECRET_KEY}
