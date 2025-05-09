@@ -1,11 +1,8 @@
-server:
-  port: 8080
-
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://host.docker.internal:3306/studyfy
+    username: root
+    password: studyfy
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
