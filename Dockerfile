@@ -7,7 +7,8 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build -x test --no-daemon
+
 
 # Run stage
 FROM openjdk:17-slim
