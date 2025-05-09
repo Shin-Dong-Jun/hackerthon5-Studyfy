@@ -1,11 +1,13 @@
 package org.example.studyfy.study.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.studyfy.member.db.Member;
 import org.example.studyfy.member.db.MemberRepository;
 import org.example.studyfy.study.dto.StudyRequestDto;
 import org.example.studyfy.study.dto.StudyResponseDto;
 import org.example.studyfy.study.entity.StudyEntity;
 import org.example.studyfy.study.repository.StudyRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +23,16 @@ public class StudyService {
 
     // 스터디 생성
     @Transactional
-    public StudyResponseDto createStudy(Long memberId, StudyRequestDto requestDto) {
+    public StudyResponseDto createStudy(StudyRequestDto requestDto) {
         // member
-//        MemberEntity creator = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
+        Member currentUser = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long creatorId = currentUser.getId();
+
+        memberRepository.findById(creatorId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
         // study
-        StudyEntity study = requestDto.toEntity(memberId);
+        StudyEntity study = requestDto.toEntity(creatorId);
         StudyEntity savedStudy = studyRepository.save(study);
 
         return StudyResponseDto.fromEntity(savedStudy);
@@ -54,7 +59,8 @@ public class StudyService {
         StudyEntity study = studyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 게시물 id를 찾을 수 없습니다.: " + id));
 
-//        validateCreatorId(study, memberId); // 작성자 id 검증
+        Member currentUser = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        validateCreatorId(study, currentUser.getId()); // 작성자 id 검증
 
         study.updateStudy(
                 request.getCategoryId(),
@@ -78,7 +84,9 @@ public class StudyService {
         StudyEntity study = studyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 게시물 id를 찾을 수 없습니다.: " + id));
 
-//        validateCreatorId(study, memberId); // 작성자 id 검증
+        Member currentUser = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        validateCreatorId(study, currentUser.getId()); // 작성자 id 검증
+
         studyRepository.deleteById(id);
     }
 
